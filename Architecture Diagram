@@ -1,0 +1,48 @@
+                 Internet Users
+                        |
+                        |
+                HTTPS (443)
+                        |
+                        v
++----------------------------------+
+| Azure Entra ID                   |
+|                                  |
+| - User Authentication            |
+| - Conditional Access             |
+| - MFA Verification               |
++---------------+------------------+
+                |
+                |
+                v
++----------------------------------+
+| Azure Application Proxy Service  |
+| (External URL Publishing)        |
++---------------+------------------+
+                |
+                |
+                v
++----------------------------------+
+| Application Proxy Connector      |
+| (Installed on Domain Joined VM)  |
+| Internal Outbound Connection     |
++---------------+------------------+
+                |
+                |
+                v
++----------------------------------+
+| VMware Environment               |
+|                                  |
+| RDWeb Server                     |
+| RD Gateway                       |
+| Connection Broker                |
+| Session Host                     |
++---------------+------------------+
+                |
+                |
+                v
++----------------------------------+
+| Internal Applications            |
+| Remote Desktop                   |
+| Published Apps                   |
+| RemoteApp                        |
++----------------------------------+
