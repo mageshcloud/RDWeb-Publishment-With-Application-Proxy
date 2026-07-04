@@ -1,0 +1,118 @@
+Step 1: Deploy RDS Infrastructure on VMware
+
+Create VMs: RDWeb Server | RD Gateway | Connection Broker |Session Host
+
+Install Roles:
+Server Manager
+ → Add Roles
+ → Remote Desktop Services
+ Verify: http://servername/RDWeb
+ --------------------------------------------------------------------------------------------------------------------------------------------
+ Step 2: Configure SSL Certificate
+
+Generate Certificate: Internal CA
+
+Bind Certificate: RDWeb | RD Gateway | RD Broker
+
+Verify: https://rdweb.company.com/RDWeb
+---------------------------------------------------------------------------------------------------------------------------------------------
+Step 3: Configure Azure Entra ID
+
+Prerequisites: Azure Entra P1/P2 | Global Administrator | Hybrid Identity
+
+Navigate: Entra Portal → Applications → Enterprise Applications → Application Proxy
+
+Enable: Application Proxy
+----------------------------------------------------------------------------------------------------------------------------------------------
+Step 4: Install Application Proxy Connector
+
+Provision VM: Windows Server | Domain Joined
+
+Recommended: 2 CPU or 4 GB RAM
+
+Download Connector:
+Navigate: Entra Portal → Application Proxy → Download Connector
+
+Install: AADApplicationProxyConnectorInstaller.exe
+
+Login: Global Admin Account
+
+Verify Status: Active → Ready
+----------------------------------------------------------------------------------------------------------------------------------------------
+Step 5: Publish RDWeb
+
+Navigate: Enterprise Applications → New Application → On-Premises Application
+
+Configure:
+Internal URL: https://rdweb.company.local/RDWeb
+External URL: https://rdweb-contoso.msappproxy.net
+
+Connector Group: Default Connector Group
+
+Protocol: HTTPS
+----------------------------------------------------------------------------------------------------------------------------------------------
+Step 6: Enable Pre-Authentication
+
+Select: Azure Entra ID
+
+Enable: Conditional Access
+
+Flow:
+
+User
+ ↓
+Entra Authentication
+ ↓
+Application Proxy
+ ↓
+RDWeb
+-----------------------------------------------------------------------------------------------------------------------------------------------
+Step 7: Configure MFA
+
+Navigate: Entra ID → Conditional Access
+
+Create Policy:
+Target:
+RDWeb Application
+Grant:
+Require MFA
+Conditions: Outside Corporate Network | High Risk Login | privileged Users
+
+Flow:
+Username
+ ↓
+Password
+ ↓
+MFA
+ ↓
+RDWeb Access
+---------------------------------------------------------------------------------------------------------------------------------------------
+Step 8: Publish RD Gateway
+
+Publish: RD Gateway
+
+Internal URL: https://rdgateway.company.local
+
+External URL: https://rdgateway.msappproxy.net
+
+Configure: HTTP Passthrough
+
+Required for: RDP Traffic | Remote Desktop Connectivity
+------------------------------------------------------------------------------------------------------------------------------------------
+Step 10: Test End User Access
+
+Access: https://rdweb-contoso.msappproxy.net/RDWeb
+
+Process:
+Login
+ ↓
+MFA
+ ↓
+RDWeb Portal
+ ↓
+Launch RemoteApp
+ ↓
+RD Gateway
+ ↓
+Session Host
+-----------------------------------------------------------------------------------------------------------------------------------------
